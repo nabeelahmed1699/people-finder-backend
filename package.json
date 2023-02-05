@@ -1,0 +1,23 @@
+{
+  "name": "people-finder-backend",
+  "version": "1.0.0",
+  "description": "people finder is an app for finding your missing love one's easily",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "peoplefinder",
+    "missing"
+  ],
+  "author": "Nabeel Ahmed",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
