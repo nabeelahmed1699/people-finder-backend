@@ -11,7 +11,7 @@ app.use(express.json());
 
 connectToDB((error) => {
 	if (!error) {
-		app.listen(port, () => console.log('listening on port...'));
+		app.listen(port, () => console.log(`listening on port ${port}...`));
 		return;
 	}
 	console.log(error);
