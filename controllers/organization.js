@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Organization = require('../schemas/organization');
 
 const getAllOrganizations = async (req, res) => {
@@ -11,9 +12,27 @@ const getAllOrganizations = async (req, res) => {
 };
 
 const createOrganization = async (req, res) => {
-	console.log('request object', req.body);
+	let organization = await Organization.findOne({
+		$or: [
+			{ email: req.body.email },
+			{ name: req.body.name },
+			{ branchCode: req.body.branchCode },
+			{ branchName: req.body.branchName },
+		],
+	});
+	if (organization)
+		return res.status(400).json({ message: 'Organization already exist!' });
 	try {
-		const people = await Organization.create(req.body);
+		const people = await Organization.create(
+			_.pick(req.body, [
+				'name',
+				'email',
+				'branchName',
+				'branchCode',
+				'phoneNo',
+				'branchaddress',
+			])
+		);
 		res.status(200).json({ message: 'organization registered successfully!' });
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
@@ -32,16 +51,15 @@ const getOrganization = async (req, res) => {
 };
 
 const updateOrganization = async (req, res) => {
-	try {
-		const person = await Organization.updateOne(
-			{ _id: req.params.id },
-			{ ...req.body }
-		);
-		res.status(200).json(person);
-	} catch (error) {
-		res.status(500).json({ message: 'Database error!' });
-		console.log('ERROR ACCURED: ', error);
-	}
+	const person = await Organization.findByIdAndUpdate(
+		req.params.id,
+		{ ...req.body },
+		{ new: true }
+	);
+	if (!person)
+		return res.status(400).json({ message: `Organization does'nt exist` });
+	
+	return res.status(200).json(person);
 };
 
 const deleteOrganization = async (req, res) => {
