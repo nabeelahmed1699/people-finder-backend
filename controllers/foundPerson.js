@@ -11,7 +11,7 @@ const getAllPersons = async (req, res) => {
 };
 
 const createPerson = async (req, res) => {
-	console.log('request object', req.body);
+	
 	try {
 		const people = await FoundedPerson.create(req.body);
 		res.status(200).json({ message: 'person created successfully!' });

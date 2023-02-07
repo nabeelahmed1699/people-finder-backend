@@ -11,11 +11,23 @@ const login = async (req, res) => {
 	const isValid = bcrypt.compare(req.body.password, user.password);
 	if (!isValid)
 		return res.status(400).json({ message: 'Invalid email or password!' });
-	const token = jwt.sign(
-		{ _id: user._id },
-		process.env.jwtPrivateKey('jwtPrivateKey')
+
+
+	const token = user.generateAuthToken();
+	res
+	.header('x-auth-token', token)
+	.status(200)
+	.json(
+		_.pick(user, [
+			'_id',
+			'name',
+			'email',
+			'DOB',
+			'gender',
+			'role',
+			'profilePic',
+		])
 	);
-	res.send(token);
 };
 
 module.exports = {login};

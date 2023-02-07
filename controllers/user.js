@@ -1,12 +1,10 @@
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const jwt = require('jsonwebtoken')
 const User = require('../schemas/user');
 
+
 const registerUser = async (req, res) => {
-	let user = await User.findOne({
-		$or: [{ email: req.body.email }, { name: req.body.name }],
-	});
+	let user = await User.findOne({ email: req.body.email });
 	if (user) return res.status(400).json({ message: 'User already exist!' });
 	try {
 		user = new User(
@@ -24,19 +22,22 @@ const registerUser = async (req, res) => {
 		user.password = await bcrypt.hash(user.password, salt);
 		await user.save();
 
-		const token = jwt.sign(
-			{ _id: user._id },
-			process.env.jwtPrivateKey('jwtPrivateKey')
-		);
+		const token = user.generateAuthToken();
 
-		res.header('x-auth-token',token).status(200).json(_.pick(req.body, [
-      'name',
-      'email',
-      'DOB',
-      'gender',
-      'role',
-      'profilePic',
-    ]));
+		res
+			.header('x-auth-token', token)
+			.status(200)
+			.json(
+				_.pick(user, [
+					'_id',
+					'name',
+					'email',
+					'DOB',
+					'gender',
+					'role',
+					'profilePic',
+				])
+			);
 	} catch (error) {
 		res.status(500).json({ message: 'Something went wrong!' });
 		console.log('ERROR ACCURED: ', error);
@@ -44,23 +45,26 @@ const registerUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+	console.log({ ...req.body });
 	const person = await User.findByIdAndUpdate(
 		req.params.id,
-		{ ...req.body },
-		{ new: true }
+		{ ...req.body }
+		// { new: true }
 	);
-	if (!person)
-		return res.status(400).json({ message: `Organization does'nt exist` });
-
-	return res.status(200).json(person);
+	if (!person) return res.status(400).json({ message: `User does'nt exist!` });
+	return res
+		.status(200)
+		.json(
+			_.pick(person, ['name', 'email', 'DOB', 'gender', 'role', 'profilePic'])
+		);
 };
 
 const deleteUser = async (req, res) => {
 	try {
 		const person = await User.deleteOne({ _id: req.params.id });
-		res.status(200).json(person);
+		res.status(200).json({ message: 'User deleted successfully!' });
 	} catch (error) {
-		res.status(500).json({ message: 'Database error!' });
+		res.status(500).json({ message: 'Something went wrong!' });
 		console.log('ERROR ACCURED: ', error);
 	}
 };

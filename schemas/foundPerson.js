@@ -21,16 +21,16 @@ const FoundedPerson = new mongoose.Schema({
   updatedAt: { type: Date, default: () => Date.now() },
 });
 
-const organizationInfo = new mongoose.Schema({
-	name: String,
-  branchName: String,
-  branchCode:String,
-	branchaddress: {
-		city: String,
-		state: String,
-		street: String,
-	},
-});
+// const organizationInfo = new mongoose.Schema({
+// 	name: String,
+//   branchName: String,
+//   branchCode:String,
+// 	branchaddress: {
+// 		city: String,
+// 		state: String,
+// 		street: String,
+// 	},
+// });
 
 
 
