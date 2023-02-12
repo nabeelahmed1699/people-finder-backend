@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors')
 const app = express();
 const foundedPerson = require('./routes/foundPerson');
 const organization = require('./routes/organization');
@@ -12,9 +13,11 @@ const roleVerification = require('./middlewares/roles');
 
 const port = process.env.PORT || 5000;
 
+app.use(cors())
+
 // middleware
 app.use(express.json());
-
+// app.use('/backend/uploads',express.static("uploads"))
 connectToDB((error) => {
 	if (!error) {
 		app.listen(port, () => console.log(`listening on port ${port}...`));
@@ -28,7 +31,7 @@ app.use('/api/v1/user', user);
 
 // JWT VERIFICATIONS
 app.use(verifyJWTToken);
-app.use(roleVerification);
+// app.use(roleVerification);
 
 // routes
 app.use('/api/v1/foundedPerson', foundedPerson);

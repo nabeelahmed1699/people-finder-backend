@@ -4,6 +4,7 @@ const Organization = new mongoose.Schema({
 	name: { type: String, immutable: true },
 	branchName: { type: String, immutable: true },
 	branchCode: { type: String, immutable: true },
+	BIO: String,
 	branchaddress: {
 		city: String,
 		country: String,
@@ -12,7 +13,8 @@ const Organization = new mongoose.Schema({
 	email: String,
 	phoneNo: String,
 	coverImage: String,
-	profilePic:String,
+	profilePic: String,
+	coverImage: String,
 	createdAt: { type: Date, immutable: true, default: () => Date.now() },
 	updatedAt: { type: Date, default: () => Date.now() },
 });

@@ -14,19 +14,21 @@ const login = async (req, res) => {
 
 
 	const token = user.generateAuthToken();
+
+const person = _.pick(user, [
+	'_id',
+	'name',
+	'email',
+	'DOB',
+	'gender',
+	'role',
+	'profilePic',
+])
+person['x-auth-token'] = token
 	res
-	.header('x-auth-token', token)
 	.status(200)
 	.json(
-		_.pick(user, [
-			'_id',
-			'name',
-			'email',
-			'DOB',
-			'gender',
-			'role',
-			'profilePic',
-		])
+		person
 	);
 };
 

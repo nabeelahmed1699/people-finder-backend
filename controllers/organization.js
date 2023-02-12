@@ -3,7 +3,7 @@ const Organization = require('../schemas/organization');
 
 const getAllOrganizations = async (req, res) => {
 	try {
-		const people = await Organization.find();
+		const people = await Organization.find().select('name _id branchName	BIO');
 		res.status(200).json(people);
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
@@ -17,7 +17,6 @@ const createOrganization = async (req, res) => {
 			{ email: req.body.email },
 			{ name: req.body.name },
 			{ branchCode: req.body.branchCode },
-			{ branchName: req.body.branchName },
 		],
 	});
 	if (organization)
@@ -31,9 +30,10 @@ const createOrganization = async (req, res) => {
 				'branchCode',
 				'phoneNo',
 				'branchaddress',
+				'BIO'
 			])
 		);
-		res.status(200).json({ message: 'organization registered successfully!' });
+		res.status(200).json({ message: 'organization registered successfully!',status:200 });
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
@@ -79,3 +79,4 @@ module.exports = {
 	deleteOrganization,
 	createOrganization,
 };
+
