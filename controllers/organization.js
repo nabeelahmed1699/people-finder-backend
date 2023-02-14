@@ -33,7 +33,8 @@ const createOrganization = async (req, res) => {
 				'BIO'
 			])
 		);
-		res.status(200).json({ message: 'organization registered successfully!',status:200 });
+		console.log("people",people)
+		res.status(200).json({ message: 'organization registered successfully!',status:200,_id:people._id });
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
