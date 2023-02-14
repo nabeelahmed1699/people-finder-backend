@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 mongoose.set('strictQuery', true);
-let connectionURI = 'mongodb://127.0.0.1:27017/peopleFinder';
+let connectionURILocal = 'mongodb://127.0.0.1:27017/peopleFinder';
+let connectionURICloud = process.env.DB_STRING;
 async function connectToDB(callback) {
 	try {
-		await mongoose.connect(connectionURI);
+		await mongoose.connect(connectionURICloud);
 		callback();
 	} catch (error) {
 		callback(error);
