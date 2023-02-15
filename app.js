@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
+var bodyParser = require('body-parser')
 const app = express();
 const foundedPerson = require('./routes/foundPerson');
 const organization = require('./routes/organization');
@@ -11,7 +12,7 @@ const verifyJWTToken = require('./middlewares/jwtVerification');
 const roleVerification = require('./middlewares/roles');
 const handleErr = require('./HandleFunction/HandleErr');
 const handleSuccess = require('./HandleFunction/handleSuccess');
-const upload = require('./HandleFunction/UploadFile')
+const upload = require('./HandleFunction/UploadFile') 
 const fs = require('fs')
 const mime = require('mime')
 const path = require('path')
@@ -21,6 +22,10 @@ app.use(cors())
 
 // middleware
 app.use(express.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+
+
 // app.use('/backend/uploads',express.static("uploads"))
 connectToDB((error) => {
 	if (!error) {
