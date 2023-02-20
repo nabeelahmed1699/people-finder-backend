@@ -14,7 +14,7 @@ const createPerson = async (req, res) => {
 	
 	try {
 		const people = await FoundedPerson.create(req.body);
-		res.status(200).json({ message: 'person created successfully!' });
+		res.status(200).json({status:200, message: 'person created successfully!' });
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
