@@ -2,7 +2,7 @@ const FoundedPerson = require('../schemas/foundPerson');
 
 const getAllPersons = async (req, res) => {
 	try {
-		const people = await FoundedPerson.find();
+		const people = await FoundedPerson.find().populate("organizationInfo");
 		res.status(200).json(people);
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
@@ -11,10 +11,15 @@ const getAllPersons = async (req, res) => {
 };
 
 const createPerson = async (req, res) => {
-	
 	try {
 		const people = await FoundedPerson.create(req.body);
-		res.status(200).json({status:200, message: 'person created successfully!' });
+		res
+			.status(200)
+			.json({
+				status: 200,
+				message: 'person created successfully!',
+				_id: people._id,
+			});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
@@ -32,12 +37,20 @@ const getPerson = async (req, res) => {
 };
 
 const updatePerson = async (req, res) => {
+	console.log({ _id: req.params.id });
 	try {
-		const person = await FoundedPerson.updateOne(
-			{ _id: req.params.id },
-			{ ...req.body }
+		const person = await FoundedPerson.findByIdAndUpdate(req.params.id ,
+			{ ...req.body },
+			{ new: true }
 		);
-		res.status(200).json(person);
+		console.log('after update',{ person });
+		res
+			.status(200)
+			.json({
+				status: 200,
+				message: 'Post updated successfully!',
+				_id: req.params.id,
+			});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
@@ -47,7 +60,7 @@ const updatePerson = async (req, res) => {
 const deletePerson = async (req, res) => {
 	try {
 		const person = await FoundedPerson.deleteOne({ _id: req.params.id });
-		res.status(200).json(person);
+		res.status(200).json({satus:200,...person});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
