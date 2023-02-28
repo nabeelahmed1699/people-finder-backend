@@ -1,9 +1,8 @@
-const FoundedPerson = require('../schemas/foundPerson');
+const MissingPerson = require('../schemas/missingPeople');
 
 const getAllPersons = async (req, res) => {
 	try {
-		const people = await FoundedPerson.find().populate("organizationInfo");
-		console.log({people})
+		const people = await MissingPerson.find().populate("posterInfo");
 		res.status(200).json({status:200,people:people});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
@@ -13,7 +12,7 @@ const getAllPersons = async (req, res) => {
 
 const createPerson = async (req, res) => {
 	try {
-		const people = await FoundedPerson.create(req.body);
+		const people = await MissingPerson.create(req.body);
 		res
 			.status(200)
 			.json({
@@ -29,7 +28,7 @@ const createPerson = async (req, res) => {
 
 const getPerson = async (req, res) => {
 	try {
-		const person = await FoundedPerson.findById(req.params.id);
+		const person = await MissingPerson.findById(req.params.id);
 		res.status(200).json(person);
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
@@ -40,7 +39,7 @@ const getPerson = async (req, res) => {
 const updatePerson = async (req, res) => {
 	console.log({ _id: req.params.id });
 	try {
-		const person = await FoundedPerson.findByIdAndUpdate(req.params.id ,
+		const person = await MissingPerson.findByIdAndUpdate(req.params.id ,
 			{ ...req.body },
 			{ new: true }
 		);
@@ -60,7 +59,7 @@ const updatePerson = async (req, res) => {
 
 const deletePerson = async (req, res) => {
 	try {
-		const person = await FoundedPerson.deleteOne({ _id: req.params.id });
+		const person = await MissingPerson.deleteOne({ _id: req.params.id });
 		res.status(200).json({satus:200,...person});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });

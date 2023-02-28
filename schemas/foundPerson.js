@@ -7,19 +7,20 @@ const FoundedPerson = new mongoose.Schema({
 	age: Number,
 	photo: String,
 	cellNo: String,
-	address: {
-		city: String,
-		state: String,
-		street: String,
-		country:String
-  },
-  mentalCondition: String,
-  physicalCondition: String,
-  dateFound: Date,
-  organizationInfo: {type:mongoose.SchemaTypes.ObjectId,ref:'Organization'},
+	city: String,
+	state: String,
+	street: String,
+	country: String,
+	mentalCondition: String,
+	physicalCondition: String,
+	dateFound: Date,
+	organizationInfo: {
+		type: mongoose.SchemaTypes.ObjectId,
+		ref: 'Organization',
+	},
 	description: String,
-  createdAt: { type: Date, immutable: true, default: () => Date.now() },
-  updatedAt: { type: Date, default: () => Date.now() },
+	createdAt: { type: Date, immutable: true, default: () => Date.now() },
+	updatedAt: { type: Date, default: () => Date.now() },
 });
 
 // const organizationInfo = new mongoose.Schema({
@@ -32,8 +33,5 @@ const FoundedPerson = new mongoose.Schema({
 // 		street: String,
 // 	},
 // });
-
-
-
 
 module.exports = mongoose.model('FoundedPerson', FoundedPerson);

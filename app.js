@@ -4,6 +4,7 @@ const cors = require('cors')
 var bodyParser = require('body-parser')
 const app = express();
 const foundedPerson = require('./routes/foundPerson');
+const MissingPerson = require('./routes/missingPeople');
 const organization = require('./routes/organization');
 const user = require('./routes/user');
 const auth = require('./routes/auth');
@@ -44,7 +45,12 @@ app.use(verifyJWTToken);
 
 // routes
 app.use('/api/v1/foundedPerson', foundedPerson);
+app.use('/api/v1/missingPerson', MissingPerson);
 app.use('/api/v1/organization', organization);
+
+
+
+
 //Upload Audio/Image/File for message
 app.post('/api/v1/uploadFile', upload.single('fileData'), (req, res) => {    //tested
 	console.log('hsfis')
