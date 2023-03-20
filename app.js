@@ -40,7 +40,7 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/user', user);
 
 // JWT VERIFICATIONS
-app.use(verifyJWTToken);
+// app.use(verifyJWTToken);
 // app.use(roleVerification);
 
 // routes
