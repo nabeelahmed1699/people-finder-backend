@@ -111,12 +111,12 @@ const getAnalytics = async (req, res) => {
                 }]
         )
         const months = Array.from({length:12},(_,index)=>{
-            let month = ''+(index+1);
-            if(parseInt(month)<10){
-                month='0'+month
-            }
-            return '' + month + '/'+'01'+startDate.getFullYear()
-        })
+            const monthIndex = index + 1;
+            const month = monthIndex < 10 ? '0' + monthIndex : monthIndex;
+            const year = startDate.getFullYear();
+            const dateString = `${year}-${month}-01`;
+            return new Date(dateString);
+        });          
         // console.log('months ---> ',months)
         const graphData = [
             {
