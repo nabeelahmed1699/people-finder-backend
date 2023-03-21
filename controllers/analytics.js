@@ -21,8 +21,8 @@ const getAnalytics = async (req, res) => {
         endDate.setUTCSeconds(59)
         endDate.setUTCMilliseconds(999)
 
-        console.log('start ---> ', startDate)
-        console.log('end ---> ', endDate)
+        // console.log('start ---> ', startDate)
+        // console.log('end ---> ', endDate)
         const organizations = await Organization.countDocuments({});
         const missing = await MissingPerson.countDocuments({});
         const founded = await FoundPerson.countDocuments({});
@@ -39,6 +39,9 @@ const getAnalytics = async (req, res) => {
                             },
                             {
                                 createdAt: { $lte: endDate }
+                            },
+                            {
+                                recovered:false
                             }
                         ]
                     }
@@ -53,7 +56,60 @@ const getAnalytics = async (req, res) => {
                     }
                 }]
         )
-        console.log('graph data ---> ', missingGraphData)
+        const recoveredGraphData = await MissingPerson.aggregate(
+            [
+                {
+                    $match: {
+                        $and: [
+                            {
+                                createdAt: { $gte: startDate }
+                            },
+                            {
+                                createdAt: { $lte: endDate }
+                            },
+                            {
+                                recovered:true
+                            }
+                        ]
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" }
+                        },
+                        Total: { $sum: 1 }
+                    }
+                }]
+        )
+        const foundGraphData = await FoundPerson.aggregate(
+            [
+                {
+                    $match: {
+                        $and: [
+                            {
+                                createdAt: { $gte: startDate }
+                            },
+                            {
+                                createdAt: { $lte: endDate }
+                            },
+                            {
+                                recovered:false
+                            }
+                        ]
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            year: { $year: "$createdAt" },
+                            month: { $month: "$createdAt" }
+                        },
+                        Total: { $sum: 1 }
+                    }
+                }]
+        )
         const months = Array.from({length:12},(_,index)=>{
             let month = ''+(index+1);
             if(parseInt(month)<10){
@@ -61,19 +117,48 @@ const getAnalytics = async (req, res) => {
             }
             return '' + month + '/'+'01'+startDate.getFullYear()
         })
-        console.log('months ---> ',months)
+        // console.log('months ---> ',months)
         const graphData = [
             {
                 name:"Missing",
                 type:'column',
                 fill:'solid',
                 data:Array.from({length:12},(_,index)=>{
-                    const missingGraphObj = missingGraphData.find((data)=>data._id)
+                    const missingGraphObj = missingGraphData.find((data)=>data._id.month===index+1)
+                    if(missingGraphObj!==undefined && missingGraphObj!==null){
+                        return missingGraphObj.Total
+                    }
+                    else return 0
+                })
+            },
+            {
+                name:"Recovered",
+                type:'area',
+                fill:'gradient',
+                data:Array.from({length:12},(_,index)=>{
+                    const recoveredGraphObj = recoveredGraphData.find((data)=>data._id.month===index+1)
+                    if(recoveredGraphObj!==undefined && recoveredGraphObj!==null){
+                        return recoveredGraphObj.Total
+                    }
+                    else return 0
+                })
+            },
+            {
+                name:"Found",
+                type:'line',
+                fill:'solid',
+                data:Array.from({length:12},(_,index)=>{
+                    const foundGraphObj = foundGraphData.find((data)=>data._id.month===index+1)
+                    if(foundGraphObj!==undefined && foundGraphObj!==null){
+                        return foundGraphObj.Total
+                    }
+                    else return 0
                 })
             }
         ]
+        // console.log('graph ---> ',graphData)
         const recovered = missingRecovered + foundRecovered
-        res.status(200).json({ status: 200, analytics: { organizations, missing, founded, total, recovered } });
+        res.status(200).json({ status: 200, analytics: { organizations, missing, founded, total, recovered,graphData,months } });
     } catch (error) {
         res.status(500).json({ message: 'Database error!' });
         console.log('ERROR ACCURED: ', error);
