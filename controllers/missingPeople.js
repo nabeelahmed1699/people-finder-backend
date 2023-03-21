@@ -43,12 +43,33 @@ const updatePerson = async (req, res) => {
 			{ ...req.body },
 			{ new: true }
 		);
-		console.log('after update',{ person });
+		// console.log('after update',{ person });
 		res
 			.status(200)
 			.json({
 				status: 200,
 				message: 'Post updated successfully!',
+				_id: req.params.id,
+			});
+	} catch (error) {
+		res.status(500).json({ message: 'Database error!' });
+		console.log('ERROR ACCURED: ', error);
+	}
+};
+
+const recoverPerson = async (req, res) => {
+	// console.log({ _id: req.params.id });
+	try {
+		const person = await MissingPerson.findByIdAndUpdate(req.params.id ,
+			{ recovered:true },
+			{ new: true }
+		);
+		console.log('after update',{ person });
+		res
+			.status(200)
+			.json({
+				status: 200,
+				message: 'Person recovered successfully!',
 				_id: req.params.id,
 			});
 	} catch (error) {
@@ -73,4 +94,5 @@ module.exports = {
 	getPerson,
 	updatePerson,
 	deletePerson,
+	recoverPerson
 };

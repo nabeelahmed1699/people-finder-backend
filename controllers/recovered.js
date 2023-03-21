@@ -1,8 +1,6 @@
 const MissingPerson = require('../schemas/missingPeople');
 const FoundPerson = require('../schemas/foundPerson');
 
-const FoundPerson = require('../schemas/foundPerson');
-
 const getAllPersons = async (req, res) => {
 	try {
 		const people = await MissingPerson.find({recovered:true}).populate("posterInfo",'name');
