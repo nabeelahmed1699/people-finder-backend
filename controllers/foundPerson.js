@@ -2,7 +2,7 @@ const FoundedPerson = require('../schemas/foundPerson');
 
 const getAllPersons = async (req, res) => {
 	try {
-		const people = await FoundedPerson.find().populate("organizationInfo");
+		const people = await FoundedPerson.find({recovered:false}).populate("organizationInfo","name");
 		console.log({people})
 		res.status(200).json({status:200,people:people});
 	} catch (error) {

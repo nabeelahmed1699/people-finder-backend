@@ -21,6 +21,7 @@ const FoundedPerson = new mongoose.Schema({
 	description: String,
 	createdAt: { type: Date, immutable: true, default: () => Date.now() },
 	updatedAt: { type: Date, default: () => Date.now() },
+	recovered:{type:Boolean,default:false}
 });
 
 // const organizationInfo = new mongoose.Schema({

@@ -6,6 +6,7 @@ const app = express();
 const foundedPerson = require('./routes/foundPerson');
 const MissingPerson = require('./routes/missingPeople');
 const organization = require('./routes/organization');
+const recovered = require('./routes/recovered');
 const user = require('./routes/user');
 const auth = require('./routes/auth');
 const connectToDB = require('./db/db');
@@ -47,6 +48,7 @@ app.use('/api/v1/user', user);
 app.use('/api/v1/foundedPerson', foundedPerson);
 app.use('/api/v1/missingPerson', MissingPerson);
 app.use('/api/v1/organization', organization);
+app.use('/api/v1/recovered', recovered);
 
 
 

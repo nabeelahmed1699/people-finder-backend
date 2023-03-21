@@ -2,7 +2,7 @@ const MissingPerson = require('../schemas/missingPeople');
 
 const getAllPersons = async (req, res) => {
 	try {
-		const people = await MissingPerson.find().populate("posterInfo");
+		const people = await MissingPerson.find({recovered:false}).populate("posterInfo",'name');;
 		res.status(200).json({status:200,people:people});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
