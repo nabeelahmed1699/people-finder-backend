@@ -68,7 +68,7 @@ const getAnalytics = async (req, res) => {
                 type:'column',
                 fill:'solid',
                 data:Array.from({length:12},(_,index)=>{
-                    const missingGraphObj = ''
+                    const missingGraphObj = missingGraphData.find((data)=>data._id)
                 })
             }
         ]
