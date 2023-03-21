@@ -81,7 +81,7 @@ const recoverPerson = async (req, res) => {
 const deletePerson = async (req, res) => {
 	try {
 		const person = await MissingPerson.deleteOne({ _id: req.params.id });
-		res.status(200).json({satus:200,...person});
+		res.status(200).json({status:200,...person});
 	} catch (error) {
 		res.status(500).json({ message: 'Database error!' });
 		console.log('ERROR ACCURED: ', error);
